@@ -1,0 +1,2248 @@
+{ "openapi": "3.0.0",
+    "info":{
+        "title":"Speckio Web App",
+        "description":"This is an express API for the Speckio web app. Made by NHMG Development.",
+        "version":"1.0.0"
+    },
+    "servers":[
+        {
+            "url": "https://localhost"
+        }
+    ],
+    "components": {
+      "securitySchemes": {
+        "ApiKeyAuth": {
+          "type": "apiKey",
+          "in": "header",
+          "name": "authorization"
+        }
+      }
+    },
+    "security": [
+      { "ApiKeyAuth": [] }
+    ],
+    "paths":{
+      "/invite": {
+        "post": {
+          "tags": [
+            "Invite"
+          ],
+          "description": "Return details of current user.",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Email sent"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Email not sent"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/register": {
+        "post": {
+          "tags": [
+            "Authentication"
+          ],
+          "summary": "Registers a new user account",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "firstName": {
+                      "type": "string",
+                      "required": true,
+                      "example": "Matthew"
+                    },
+                    "lastName": {
+                      "type": "string",
+                      "required": true,
+                      "example": "Mulheran"
+                    },
+                    "password": {
+                      "type": "string",
+                      "required": true,
+                      "example": "password"
+                    },
+                    "token": {
+                      "type": "string",
+                      "required": true,
+                      "example": "0398c205fb27607f7ba61eff7fb83fa69b269847"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Created",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "yay! you've successfully registered your user account :)"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "oops! It looks like that user already exists :("
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/login": {
+          "post": {
+            "tags": [
+              "Authentication"
+            ],
+            "summary": "Login with an existing user account",
+            "requestBody": {
+              "required": true,
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "email": {
+                        "type": "string",
+                        "required": true,
+                        "example": "demo-user@gmail.com"
+                      },
+                      "password": {
+                        "type": "string",
+                        "required": true,
+                        "example": "demouserpassword"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "responses": {
+              "200": {
+                "description": "OK",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string",
+                          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo1Nzg2LCJlbWFpbCI6ImRlbW8xMjM0QGdtYWlsLmNvbSJ9LCJpYXQiOjE1NTUzMjQ2MDIsImV4cCI6MTU1NTQxMTAwMn0.mo85iKuAQ_h8n8-6pkeNNs5CCnV0G8hScxhi_ml_Q6c"
+                        },
+                        "access_token": {
+                          "type": "string",
+                          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo1Nzg2LCJlbWFpbCI6ImRlbW8xMjM0QGdtYWlsLmNvbSJ9LCJpYXQiOjE1NTUzMjQ2MDIsImV4cCI6MTU1NTQxMTAwMn0.mo85iKuAQ_h8n8-6pkeNNs5CCnV0G8hScxhi_ml_Q6c"
+                        },
+                        "token_type": {
+                          "type": "string",
+                          "example": "Bearer"
+                        },
+                        "expires_in": {
+                          "type": "integer",
+                          "example": 86400
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "401": {
+                "description": "Unauthorized",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "invalid login - bad password"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+      },
+      "/user": {
+        "get": {
+          "tags": [
+            "User"
+          ],
+          "description": "Return details of current user.",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "user": {
+                        "type": "object",
+                        "example": {
+                          "firstName": "John",
+                          "lastName": "Smith",
+                          "email": "johns@speckio.com"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "messege": {
+                        "type": "string",
+                        "example": "User not found"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "patch": {
+          "tags": [
+            "User"
+          ],
+          "description": "Update details of current user.",
+          "parameters": [
+            {
+              "name": "firstName",
+              "in": "query",
+              "description": "First name of user",
+              "required": false,
+              "schema": {
+                "type": "string",
+                "example": "John"
+              }
+            },
+            {
+              "name": "lastName",
+              "in": "query",
+              "description": "Last name of user",
+              "required": false,
+              "schema": {
+                "type": "string",
+                "example": "Smith"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "messege": {
+                        "type": "string",
+                        "example": "User info updated"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "messege": {
+                        "type": "string",
+                        "example": "User not found"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/team": {
+        "get": {
+          "tags": [
+            "User"
+          ],
+          "description": "Return an array of teams for a given user.",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "teams": {
+                        "type": "array",
+                        "example": [
+                          {
+                            "teamID": 1,
+                            "teamName": "Speckio Development Team",
+                            "teamDescription": "Web development team at Speckio.",
+                            "teamLeaderID": 2,
+                            "firstName": "Jane",
+                            "lastName": "Doe",
+                            "hasAccepted": 1
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "messege": {
+                        "type": "string",
+                        "example": "No teams found"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "User"
+          ],
+          "description": "Delete current user from a given team",
+          "parameters": [
+            {
+              "name": "teamID",
+              "in": "query",
+              "description": "ID of team",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "example": 1
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "messege": {
+                        "type": "string",
+                        "example": "User removed from team"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "messege": {
+                        "type": "string",
+                        "example": "No teams found"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/join": {
+        "patch": {
+          "tags": ["User"],
+          "description": "Accept invitation to join team",
+          "parameters": [
+          {
+            "name": "teamID",
+            "in": "query",
+            "description": "ID of team",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "400": {
+              "description": "BAD"
+            }
+          }
+        }
+      },
+      "/user/password": {
+        "patch": {
+          "tags": ["User"],
+          "description": "Update users password",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "currentPassword": {
+                      "type": "string",
+                      "example": "demouserpassword"
+                    },
+                    "newPassword": {
+                      "type": "string",
+                      "example": "newpassword"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "400": {
+              "description": "BAD"
+            }
+          }
+        }
+      },
+      "/team": {
+        "get": {
+          "tags": [
+            "Team"
+          ],
+          "description": "Return details of given team",
+          "parameters": [
+            {
+              "name": "teamID",
+              "in": "query",
+              "description": "ID of team to search for",
+              "required": true,
+              "schema": {
+                "type": "number",
+                "example": 1
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "team": {
+                        "type": "object",
+                        "example": {
+                          "teamID": 1,
+                          "teamName": "Speckio Development Team",
+                          "teamDescription": "Web development team at Speckio.",
+                          "teamLeaderID": 2,
+                          "firstName" : "Jane",
+                          "lastName" : "Doe"                          
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "messege": {
+                        "type": "string",
+                        "example": "Team not found"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "Team"
+          ],
+          "description": "Create a new team",
+          "parameters": [
+            {
+              "name": "name",
+              "in": "query",
+              "description": "Name of team",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "NHMG Development"
+              }
+            },
+            {
+              "name": "desc",
+              "in": "query",
+              "description": "Description of team",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "QUT Capstone Team"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "team created"
+                      },
+                      "teamID": {
+                        "type": "integer",
+                        "example": "2"
+                      }    
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "messege": {
+                        "type": "string",
+                        "example": "Team not found"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "patch": {
+          "tags": [
+            "Team"
+          ],
+          "description": "Edit a team",
+          "parameters": [
+            {
+              "name": "teamID",
+              "in": "query",
+              "description": "ID of team",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "example": 2
+              }
+            },
+            {
+              "name": "name",
+              "in": "query",
+              "description": "Name of team",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "NHMG Development 2"
+              }
+            },
+            {
+              "name": "desc",
+              "in": "query",
+              "description": "Description of team",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "QUT Capstone Team 3"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "team created"
+                      },
+                      "teamID": {
+                        "type": "integer",
+                        "example": "2"
+                      }    
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "messege": {
+                        "type": "string",
+                        "example": "Team not found"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "Team"
+          ],
+          "description": "Delete a given team.",
+          "parameters": [
+            {
+              "name": "teamID",
+              "in": "query",
+              "description": "ID of team to delete",
+              "required": true,
+              "schema": {
+                "type": "number",
+                "example": 1
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "team": {
+                        "type": "object",
+                        "example": {
+                          "message": "Team removed"                        
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "messege": {
+                        "type": "string",
+                        "example": "Team not found"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/team/overview": {
+        "get": {
+          "tags": [
+            "Team"
+          ],
+          "description": "Return an array of users strengths and weaknesses in a given team.",
+          "parameters": [
+            {
+              "name": "teamID",
+              "in": "query",
+              "description": "ID of team to search for",
+              "required": true,
+              "schema": {
+                "type": "number",
+                "example": 1
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "overview": {
+                        "type": "array",
+                        "example": [
+                          {
+                            "userID": 1,
+                            "firstName": "John",
+                            "lastName": "Smith",
+                            "descName": "High Interpersonal Relationships",
+                            "strengths": "High Interpersonal Relationships Strengths",
+                            "weaknesses": "High Interpersonal Relationships Weaknesses"
+                          },
+                          {
+                            "userID": 2,
+                            "firstName": "Jane",
+                            "lastName": "Doe",
+                            "descName": "Mid Interpersonal Relationships",
+                            "strengths": "Mid Interpersonal Relationships Strengths",
+                            "weaknesses": "Mid Interpersonal Relationships Weaknesses"
+                          },
+                          {
+                            "userID": 3,
+                            "firstName": "George",
+                            "lastName": "Adams",
+                            "descName": "Mid Interpersonal Relationships",
+                            "strengths": "Mid Interpersonal Relationships Strengths",
+                            "weaknesses": "Mid Interpersonal Relationships Weaknesses"
+                          },
+                          {
+                            "userID": 4,
+                            "firstName": "Lucy",
+                            "lastName": "Barnes",
+                            "descName": "Low Interpersonal Relationships",
+                            "strengths": "Low Interpersonal Relationships Strengths",
+                            "weaknesses": "Low Interpersonal Relationships Weaknesses"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "messege": {
+                        "type": "string",
+                        "example": "Team not found"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/team/user": {
+        "get": {
+          "tags": [
+            "Team"
+          ],
+          "description": "Return an array of users in a given team.",
+          "parameters": [
+            {
+              "name": "teamID",
+              "in": "query",
+              "description": "ID of team to search for",
+              "required": true,
+              "schema": {
+                "type": "number",
+                "example": 1
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "team": {
+                        "type": "array",
+                        "example": [
+                          {
+                            "userID": 1,
+                            "firstname": "John",
+                            "lastname": "Smith",
+                            "email": "johns@speckio.com"
+                          },
+                          {
+                            "userID": 2,
+                            "firstname": "Jane",
+                            "lastname": "Doe",
+                            "email": "janed@speckio.com"
+                          },
+                          {
+                            "userID": 3,
+                            "firstname": "George",
+                            "lastname": "Adams",
+                            "email": "georgea@speckio.com"
+                          },
+                          {
+                            "userID": 4,
+                            "firstname": "Lucy",
+                            "lastname": "Barnes",
+                            "email": "lucyb@speckio.com"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "messege": {
+                        "type": "string",
+                        "example": "Team not found"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "Team"
+          ],
+          "description": "Add user to team",
+          "parameters": [
+            {
+              "name": "email",
+              "in": "query",
+              "description": "Email of user",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "walterf@speckio.com"
+              }
+            },
+            {
+              "name": "teamID",
+              "in": "query",
+              "description": "ID of team",
+              "required": true,
+              "schema": {
+                "type": "number",
+                "example": "1"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "team": {
+                        "type": "array",
+                        "example": [
+                          {"firstname":"John","lastname":"Smith","email":"johns@speckio.com"},
+                          {"firstname":"Jane","lastname":"Doe","email":"janed@speckio.com"},
+                          {"firstname":"George","lastname":"Adams","email":"georgea@speckio.com"},
+                          {"firstname":"Lucy","lastname":"Barnes","email":"lucyb@speckio.com"}
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "messege": {
+                        "type": "string",
+                        "example": "Team not found"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "Team"
+          ],
+          "description": "Delete a user from a team",
+          "parameters": [
+            {
+              "name": "teamID",
+              "in": "query",
+              "description": "ID of team",
+              "required": true,
+              "schema": {
+                "type": "number",
+                "example": 1
+              }
+            },
+            {
+              "name": "userID",
+              "in": "query",
+              "description": "ID of user",
+              "required": true,
+              "schema": {
+                "type": "number",
+                "example": 1
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "team": {
+                        "type": "object",
+                        "example": {
+                          "message": "User removed from team"                        
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "messege": {
+                        "type": "string",
+                        "example": "Teammember not found"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/org/admin": {
+        "get": {
+          "tags": [
+            "Organisations"
+          ],
+          "description": "Return an array of admins in organisations",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "team": {
+                        "type": "array",
+                        "example": [
+                          {
+                            "userID": 1,
+                            "firstName": "John",
+                            "lastName": "Smith",
+                            "email": "johns@speckio.com"
+                          },
+                          {
+                            "userID": 3,
+                            "firstName": "George",
+                            "lastName": "Adams",
+                            "email": "georgea@speckio.com"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "messege": {
+                        "type": "string",
+                        "example": "Admins not found"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "Organisations"
+          ],
+          "description": "Add user to admins",
+          "parameters": [
+            {
+              "name": "userID",
+              "in": "query",
+              "description": "ID of user",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "example": "3"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "messege": {
+                        "type": "string",
+                        "example": "User added to admins"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "messege": {
+                        "type": "string",
+                        "example": "Unable to add user to admins"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "Organisations"
+          ],
+          "description": "Delete a user from admins",
+          "parameters": [
+            {
+              "name": "userID",
+              "in": "query",
+              "description": "ID of user",
+              "required": true,
+              "schema": {
+                "type": "number",
+                "example": 3
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "team": {
+                        "type": "object",
+                        "example": {
+                          "message": "User removed from admins"                        
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "messege": {
+                        "type": "string",
+                        "example": "Unable to remove admin"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/result/eqi": {
+        "get": {
+          "tags": [
+            "Result"
+          ],
+          "description": "Return an EQi results for current user",
+          "parameters": [
+            {
+              "name": "userID",
+              "in": "query",
+              "description": "ID of user",
+              "required": false,
+              "schema": {
+                "type": "number",
+                "example": 1
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "results": {
+                        "type": "array",
+                        "example": [
+                          {
+                            "userID": 1,
+                            "categoryName": "Self-Regard",
+                            "score": 115,
+                            "descName": "High Self-Regard",
+                            "behaviour": "High Self-Regard Behavioural Insights",
+                            "motivators": "High Self-Regard Motivators",
+                            "strengths": "High Self-Regard Strengths",
+                            "weaknesses": "High Self-Regard Weaknesses",
+                            "reaction": "High Self-Regard Reaction Modes",
+                            "communication": "High Self-Regard Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Self-Actualisation",
+                            "score": 115,
+                            "descName": "High Self-Actualisation",
+                            "behaviour": "High Self-Actualisation Behavioural Insights",
+                            "motivators": "High Self-Actualisation Motivators",
+                            "strengths": "High Self-Actualisation Strengths",
+                            "weaknesses": "High Self-Actualisation Weaknesses",
+                            "reaction": "High Self-Actualisation Reaction Modes",
+                            "communication": "High Self-Actualisation Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Emotional Self-Awareness",
+                            "score": 115,
+                            "descName": "High Emotional Self-Awareness",
+                            "behaviour": "High Emotional Self-Awareness Behavioural Insights",
+                            "motivators": "High Emotional Self-Awareness Motivators",
+                            "strengths": "High Emotional Self-Awareness Strengths",
+                            "weaknesses": "High Emotional Self-Awareness Weaknesses",
+                            "reaction": "High Emotional Self-Awareness Reaction Modes",
+                            "communication": "High Emotional Self-Awareness Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Emotional Expression",
+                            "score": 115,
+                            "descName": "High Emotional Expression",
+                            "behaviour": "High Emotional Expression Behavioural Insights",
+                            "motivators": "High Emotional Expression Motivators",
+                            "strengths": "High Emotional Expression Strengths",
+                            "weaknesses": "High Emotional Expression Weaknesses",
+                            "reaction": "High Emotional Expression Reaction Modes",
+                            "communication": "High Emotional Expression Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Asertiveness",
+                            "score": 115,
+                            "descName": "High Asertiveness",
+                            "behaviour": "High Asertiveness Behavioural Insights",
+                            "motivators": "High Asertiveness Motivators",
+                            "strengths": "High Asertiveness Strengths",
+                            "weaknesses": "High Asertiveness Weaknesses",
+                            "reaction": "High Asertiveness Reaction Modes",
+                            "communication": "High Asertiveness Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Independence",
+                            "score": 115,
+                            "descName": "High Independence",
+                            "behaviour": "High Independence Behavioural Insights",
+                            "motivators": "High Independence Motivators",
+                            "strengths": "High Independence Strengths",
+                            "weaknesses": "High Independence Weaknesses",
+                            "reaction": "High Independence Reaction Modes",
+                            "communication": "High Independence Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Interpersonal Relationships",
+                            "score": 115,
+                            "descName": "High Interpersonal Relationships",
+                            "behaviour": "High Interpersonal Relationships Behavioural Insights",
+                            "motivators": "High Interpersonal Relationships Motivators",
+                            "strengths": "High Interpersonal Relationships Strengths",
+                            "weaknesses": "High Interpersonal Relationships Weaknesses",
+                            "reaction": "High Interpersonal Relationships Reaction Modes",
+                            "communication": "High Interpersonal Relationships Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Empathy",
+                            "score": 115,
+                            "descName": "High Empathy",
+                            "behaviour": "High Empathy Behavioural Insights",
+                            "motivators": "High Empathy Motivators",
+                            "strengths": "High Empathy Strengths",
+                            "weaknesses": "High Empathy Weaknesses",
+                            "reaction": "High Empathy Reaction Modes",
+                            "communication": "High Empathy Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Social Responsibility",
+                            "score": 115,
+                            "descName": "High Social Responsibility",
+                            "behaviour": "High Social Responsibility Behavioural Insights",
+                            "motivators": "High Social Responsibility Motivators",
+                            "strengths": "High Social Responsibility Strengths",
+                            "weaknesses": "High Social Responsibility Weaknesses",
+                            "reaction": "High Social Responsibility Reaction Modes",
+                            "communication": "High Social Responsibility Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Problem Solving",
+                            "score": 115,
+                            "descName": "High Problem Solving",
+                            "behaviour": "High Problem Solving Behavioural Insights",
+                            "motivators": "High Problem Solving Motivators",
+                            "strengths": "High Problem Solving Strengths",
+                            "weaknesses": "High Problem Solving Weaknesses",
+                            "reaction": "High Problem Solving Reaction Modes",
+                            "communication": "High Problem Solving Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Reality Testing",
+                            "score": 115,
+                            "descName": "High Reality Testing",
+                            "behaviour": "High Reality Testing Behavioural Insights",
+                            "motivators": "High Reality Testing Motivators",
+                            "strengths": "High Reality Testing Strengths",
+                            "weaknesses": "High Reality Testing Weaknesses",
+                            "reaction": "High Reality Testing Reaction Modes",
+                            "communication": "High Reality Testing Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Impulse Control",
+                            "score": 115,
+                            "descName": "High Impulse Control",
+                            "behaviour": "High Impulse Control Behavioural Insights",
+                            "motivators": "High Impulse Control Motivators",
+                            "strengths": "High Impulse Control Strengths",
+                            "weaknesses": "High Impulse Control Weaknesses",
+                            "reaction": "High Impulse Control Reaction Modes",
+                            "communication": "High Impulse Control Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Flexibility",
+                            "score": 115,
+                            "descName": "High Flexibility",
+                            "behaviour": "High Flexibility Behavioural Insights",
+                            "motivators": "High Flexibility Motivators",
+                            "strengths": "High Flexibility Strengths",
+                            "weaknesses": "High Flexibility Weaknesses",
+                            "reaction": "High Flexibility Reaction Modes",
+                            "communication": "High Flexibility Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Stress Tolerance",
+                            "score": 115,
+                            "descName": "High Stress Tolerance",
+                            "behaviour": "High Stress Tolerance Behavioural Insights",
+                            "motivators": "High Stress Tolerance Motivators",
+                            "strengths": "High Stress Tolerance Strengths",
+                            "weaknesses": "High Stress Tolerance Weaknesses",
+                            "reaction": "High Stress Tolerance Reaction Modes",
+                            "communication": "High Stress Tolerance Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Optimism",
+                            "score": 115,
+                            "descName": "High Optimism",
+                            "behaviour": "High Optimism Behavioural Insights",
+                            "motivators": "High Optimism Motivators",
+                            "strengths": "High Optimism Strengths",
+                            "weaknesses": "High Optimism Weaknesses",
+                            "reaction": "High Optimism Reaction Modes",
+                            "communication": "High Optimism Communication"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "messege": {
+                        "type": "string",
+                        "example": "User results not found"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "Result"
+          ],
+          "description": "Post EQi results for current user",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "example": [
+                        { "categoryID": 1, "score": 115 },
+                        { "categoryID": 2, "score": 115 },
+                        { "categoryID": 3, "score": 115 },
+                        { "categoryID": 4, "score": 115 },
+                        { "categoryID": 5, "score": 115 },
+                        { "categoryID": 6, "score": 115 },
+                        { "categoryID": 7, "score": 115 },
+                        { "categoryID": 8, "score": 115 },
+                        { "categoryID": 9, "score": 115 },
+                        { "categoryID": 10, "score": 115 },
+                        { "categoryID": 11, "score": 115 },
+                        { "categoryID": 12, "score": 115 },
+                        { "categoryID": 13, "score": 115 },
+                        { "categoryID": 14, "score": 115 },
+                        { "categoryID": 15, "score": 115 }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "results": {
+                        "type": "array",
+                        "example": [
+                          {
+                            "userID": 1,
+                            "categoryName": "Self-Regard",
+                            "score": 115,
+                            "descName": "High Self-Regard",
+                            "behaviour": "High Self-Regard Behavioural Insights",
+                            "motivators": "High Self-Regard Motivators",
+                            "strengths": "High Self-Regard Strengths",
+                            "weaknesses": "High Self-Regard Weaknesses",
+                            "reaction": "High Self-Regard Reaction Modes",
+                            "communication": "High Self-Regard Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Self-Actualisation",
+                            "score": 115,
+                            "descName": "High Self-Actualisation",
+                            "behaviour": "High Self-Actualisation Behavioural Insights",
+                            "motivators": "High Self-Actualisation Motivators",
+                            "strengths": "High Self-Actualisation Strengths",
+                            "weaknesses": "High Self-Actualisation Weaknesses",
+                            "reaction": "High Self-Actualisation Reaction Modes",
+                            "communication": "High Self-Actualisation Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Emotional Self-Awareness",
+                            "score": 115,
+                            "descName": "High Emotional Self-Awareness",
+                            "behaviour": "High Emotional Self-Awareness Behavioural Insights",
+                            "motivators": "High Emotional Self-Awareness Motivators",
+                            "strengths": "High Emotional Self-Awareness Strengths",
+                            "weaknesses": "High Emotional Self-Awareness Weaknesses",
+                            "reaction": "High Emotional Self-Awareness Reaction Modes",
+                            "communication": "High Emotional Self-Awareness Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Emotional Expression",
+                            "score": 115,
+                            "descName": "High Emotional Expression",
+                            "behaviour": "High Emotional Expression Behavioural Insights",
+                            "motivators": "High Emotional Expression Motivators",
+                            "strengths": "High Emotional Expression Strengths",
+                            "weaknesses": "High Emotional Expression Weaknesses",
+                            "reaction": "High Emotional Expression Reaction Modes",
+                            "communication": "High Emotional Expression Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Asertiveness",
+                            "score": 115,
+                            "descName": "High Asertiveness",
+                            "behaviour": "High Asertiveness Behavioural Insights",
+                            "motivators": "High Asertiveness Motivators",
+                            "strengths": "High Asertiveness Strengths",
+                            "weaknesses": "High Asertiveness Weaknesses",
+                            "reaction": "High Asertiveness Reaction Modes",
+                            "communication": "High Asertiveness Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Independence",
+                            "score": 115,
+                            "descName": "High Independence",
+                            "behaviour": "High Independence Behavioural Insights",
+                            "motivators": "High Independence Motivators",
+                            "strengths": "High Independence Strengths",
+                            "weaknesses": "High Independence Weaknesses",
+                            "reaction": "High Independence Reaction Modes",
+                            "communication": "High Independence Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Interpersonal Relationships",
+                            "score": 115,
+                            "descName": "High Interpersonal Relationships",
+                            "behaviour": "High Interpersonal Relationships Behavioural Insights",
+                            "motivators": "High Interpersonal Relationships Motivators",
+                            "strengths": "High Interpersonal Relationships Strengths",
+                            "weaknesses": "High Interpersonal Relationships Weaknesses",
+                            "reaction": "High Interpersonal Relationships Reaction Modes",
+                            "communication": "High Interpersonal Relationships Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Empathy",
+                            "score": 115,
+                            "descName": "High Empathy",
+                            "behaviour": "High Empathy Behavioural Insights",
+                            "motivators": "High Empathy Motivators",
+                            "strengths": "High Empathy Strengths",
+                            "weaknesses": "High Empathy Weaknesses",
+                            "reaction": "High Empathy Reaction Modes",
+                            "communication": "High Empathy Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Social Responsibility",
+                            "score": 115,
+                            "descName": "High Social Responsibility",
+                            "behaviour": "High Social Responsibility Behavioural Insights",
+                            "motivators": "High Social Responsibility Motivators",
+                            "strengths": "High Social Responsibility Strengths",
+                            "weaknesses": "High Social Responsibility Weaknesses",
+                            "reaction": "High Social Responsibility Reaction Modes",
+                            "communication": "High Social Responsibility Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Problem Solving",
+                            "score": 115,
+                            "descName": "High Problem Solving",
+                            "behaviour": "High Problem Solving Behavioural Insights",
+                            "motivators": "High Problem Solving Motivators",
+                            "strengths": "High Problem Solving Strengths",
+                            "weaknesses": "High Problem Solving Weaknesses",
+                            "reaction": "High Problem Solving Reaction Modes",
+                            "communication": "High Problem Solving Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Reality Testing",
+                            "score": 115,
+                            "descName": "High Reality Testing",
+                            "behaviour": "High Reality Testing Behavioural Insights",
+                            "motivators": "High Reality Testing Motivators",
+                            "strengths": "High Reality Testing Strengths",
+                            "weaknesses": "High Reality Testing Weaknesses",
+                            "reaction": "High Reality Testing Reaction Modes",
+                            "communication": "High Reality Testing Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Impulse Control",
+                            "score": 115,
+                            "descName": "High Impulse Control",
+                            "behaviour": "High Impulse Control Behavioural Insights",
+                            "motivators": "High Impulse Control Motivators",
+                            "strengths": "High Impulse Control Strengths",
+                            "weaknesses": "High Impulse Control Weaknesses",
+                            "reaction": "High Impulse Control Reaction Modes",
+                            "communication": "High Impulse Control Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Flexibility",
+                            "score": 115,
+                            "descName": "High Flexibility",
+                            "behaviour": "High Flexibility Behavioural Insights",
+                            "motivators": "High Flexibility Motivators",
+                            "strengths": "High Flexibility Strengths",
+                            "weaknesses": "High Flexibility Weaknesses",
+                            "reaction": "High Flexibility Reaction Modes",
+                            "communication": "High Flexibility Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Stress Tolerance",
+                            "score": 115,
+                            "descName": "High Stress Tolerance",
+                            "behaviour": "High Stress Tolerance Behavioural Insights",
+                            "motivators": "High Stress Tolerance Motivators",
+                            "strengths": "High Stress Tolerance Strengths",
+                            "weaknesses": "High Stress Tolerance Weaknesses",
+                            "reaction": "High Stress Tolerance Reaction Modes",
+                            "communication": "High Stress Tolerance Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Optimism",
+                            "score": 115,
+                            "descName": "High Optimism",
+                            "behaviour": "High Optimism Behavioural Insights",
+                            "motivators": "High Optimism Motivators",
+                            "strengths": "High Optimism Strengths",
+                            "weaknesses": "High Optimism Weaknesses",
+                            "reaction": "High Optimism Reaction Modes",
+                            "communication": "High Optimism Communication"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "messege": {
+                        "type": "string",
+                        "example": "User results not found"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "patch": {
+          "tags": [
+            "Result"
+          ],
+          "description": "Post EQi results for current user",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "example": [
+                        { "categoryID": 1, "score": 99 },
+                        { "categoryID": 14, "score": 99 },
+                        { "categoryID": 15, "score": 99 }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "results": {
+                        "type": "array",
+                        "example": [
+                          {
+                            "userID": 1,
+                            "categoryName": "Self-Regard",
+                            "score": 115,
+                            "descName": "High Self-Regard",
+                            "behaviour": "High Self-Regard Behavioural Insights",
+                            "motivators": "High Self-Regard Motivators",
+                            "strengths": "High Self-Regard Strengths",
+                            "weaknesses": "High Self-Regard Weaknesses",
+                            "reaction": "High Self-Regard Reaction Modes",
+                            "communication": "High Self-Regard Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Self-Actualisation",
+                            "score": 115,
+                            "descName": "High Self-Actualisation",
+                            "behaviour": "High Self-Actualisation Behavioural Insights",
+                            "motivators": "High Self-Actualisation Motivators",
+                            "strengths": "High Self-Actualisation Strengths",
+                            "weaknesses": "High Self-Actualisation Weaknesses",
+                            "reaction": "High Self-Actualisation Reaction Modes",
+                            "communication": "High Self-Actualisation Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Emotional Self-Awareness",
+                            "score": 115,
+                            "descName": "High Emotional Self-Awareness",
+                            "behaviour": "High Emotional Self-Awareness Behavioural Insights",
+                            "motivators": "High Emotional Self-Awareness Motivators",
+                            "strengths": "High Emotional Self-Awareness Strengths",
+                            "weaknesses": "High Emotional Self-Awareness Weaknesses",
+                            "reaction": "High Emotional Self-Awareness Reaction Modes",
+                            "communication": "High Emotional Self-Awareness Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Emotional Expression",
+                            "score": 115,
+                            "descName": "High Emotional Expression",
+                            "behaviour": "High Emotional Expression Behavioural Insights",
+                            "motivators": "High Emotional Expression Motivators",
+                            "strengths": "High Emotional Expression Strengths",
+                            "weaknesses": "High Emotional Expression Weaknesses",
+                            "reaction": "High Emotional Expression Reaction Modes",
+                            "communication": "High Emotional Expression Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Asertiveness",
+                            "score": 115,
+                            "descName": "High Asertiveness",
+                            "behaviour": "High Asertiveness Behavioural Insights",
+                            "motivators": "High Asertiveness Motivators",
+                            "strengths": "High Asertiveness Strengths",
+                            "weaknesses": "High Asertiveness Weaknesses",
+                            "reaction": "High Asertiveness Reaction Modes",
+                            "communication": "High Asertiveness Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Independence",
+                            "score": 115,
+                            "descName": "High Independence",
+                            "behaviour": "High Independence Behavioural Insights",
+                            "motivators": "High Independence Motivators",
+                            "strengths": "High Independence Strengths",
+                            "weaknesses": "High Independence Weaknesses",
+                            "reaction": "High Independence Reaction Modes",
+                            "communication": "High Independence Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Interpersonal Relationships",
+                            "score": 115,
+                            "descName": "High Interpersonal Relationships",
+                            "behaviour": "High Interpersonal Relationships Behavioural Insights",
+                            "motivators": "High Interpersonal Relationships Motivators",
+                            "strengths": "High Interpersonal Relationships Strengths",
+                            "weaknesses": "High Interpersonal Relationships Weaknesses",
+                            "reaction": "High Interpersonal Relationships Reaction Modes",
+                            "communication": "High Interpersonal Relationships Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Empathy",
+                            "score": 115,
+                            "descName": "High Empathy",
+                            "behaviour": "High Empathy Behavioural Insights",
+                            "motivators": "High Empathy Motivators",
+                            "strengths": "High Empathy Strengths",
+                            "weaknesses": "High Empathy Weaknesses",
+                            "reaction": "High Empathy Reaction Modes",
+                            "communication": "High Empathy Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Social Responsibility",
+                            "score": 115,
+                            "descName": "High Social Responsibility",
+                            "behaviour": "High Social Responsibility Behavioural Insights",
+                            "motivators": "High Social Responsibility Motivators",
+                            "strengths": "High Social Responsibility Strengths",
+                            "weaknesses": "High Social Responsibility Weaknesses",
+                            "reaction": "High Social Responsibility Reaction Modes",
+                            "communication": "High Social Responsibility Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Problem Solving",
+                            "score": 115,
+                            "descName": "High Problem Solving",
+                            "behaviour": "High Problem Solving Behavioural Insights",
+                            "motivators": "High Problem Solving Motivators",
+                            "strengths": "High Problem Solving Strengths",
+                            "weaknesses": "High Problem Solving Weaknesses",
+                            "reaction": "High Problem Solving Reaction Modes",
+                            "communication": "High Problem Solving Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Reality Testing",
+                            "score": 115,
+                            "descName": "High Reality Testing",
+                            "behaviour": "High Reality Testing Behavioural Insights",
+                            "motivators": "High Reality Testing Motivators",
+                            "strengths": "High Reality Testing Strengths",
+                            "weaknesses": "High Reality Testing Weaknesses",
+                            "reaction": "High Reality Testing Reaction Modes",
+                            "communication": "High Reality Testing Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Impulse Control",
+                            "score": 115,
+                            "descName": "High Impulse Control",
+                            "behaviour": "High Impulse Control Behavioural Insights",
+                            "motivators": "High Impulse Control Motivators",
+                            "strengths": "High Impulse Control Strengths",
+                            "weaknesses": "High Impulse Control Weaknesses",
+                            "reaction": "High Impulse Control Reaction Modes",
+                            "communication": "High Impulse Control Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Flexibility",
+                            "score": 115,
+                            "descName": "High Flexibility",
+                            "behaviour": "High Flexibility Behavioural Insights",
+                            "motivators": "High Flexibility Motivators",
+                            "strengths": "High Flexibility Strengths",
+                            "weaknesses": "High Flexibility Weaknesses",
+                            "reaction": "High Flexibility Reaction Modes",
+                            "communication": "High Flexibility Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Stress Tolerance",
+                            "score": 115,
+                            "descName": "High Stress Tolerance",
+                            "behaviour": "High Stress Tolerance Behavioural Insights",
+                            "motivators": "High Stress Tolerance Motivators",
+                            "strengths": "High Stress Tolerance Strengths",
+                            "weaknesses": "High Stress Tolerance Weaknesses",
+                            "reaction": "High Stress Tolerance Reaction Modes",
+                            "communication": "High Stress Tolerance Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Optimism",
+                            "score": 115,
+                            "descName": "High Optimism",
+                            "behaviour": "High Optimism Behavioural Insights",
+                            "motivators": "High Optimism Motivators",
+                            "strengths": "High Optimism Strengths",
+                            "weaknesses": "High Optimism Weaknesses",
+                            "reaction": "High Optimism Reaction Modes",
+                            "communication": "High Optimism Communication"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "messege": {
+                        "type": "string",
+                        "example": "User results not found"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete" : {
+          "tags": [
+            "Result"
+          ],
+          "description": "Return an EQi results for current user",
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "400": {
+              "description": "Bad Request"
+            }
+          }
+        }
+      },
+      "/result/disc": {
+        "get": {
+          "tags": [
+            "Result"
+          ],
+          "description": "Return an disc results for a given user.",
+          "parameters": [
+            {
+              "name": "userID",
+              "in": "query",
+              "description": "ID of user to search for",
+              "required": true,
+              "schema": {
+                "type": "number",
+                "example": 1
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "results": {
+                        "type": "array",
+                        "example": [
+                          {
+                            "userID": 1,
+                            "typeName": "Dominance C",
+                            "behaviour": "Dominance C Behavioural Insights",
+                            "motivators": "Dominance C Motivators",
+                            "strengths": "Dominance C Strengths",
+                            "weaknesses": "Dominance C Weaknesses",
+                            "reaction": "Dominance C Reaction Modes",
+                            "communication": "Dominance C Communication"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "messege": {
+                        "type": "string",
+                        "example": "User results not found"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/result/team/eqi": {
+        "get": {
+          "tags": [
+            "Result"
+          ],
+          "description": "Return an EQi results for a given team",
+          "parameters": [
+            {
+              "name": "teamID",
+              "in": "query",
+              "description": "ID of team to search for",
+              "required": false,
+              "schema": {
+                "type": "number",
+                "example": 1
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "results": {
+                        "type": "array",
+                        "example": [
+                          {
+                            "userID": 1,
+                            "categoryName": "Self-Regard",
+                            "score": 115,
+                            "descName": "High Self-Regard",
+                            "behaviour": "High Self-Regard Behavioural Insights",
+                            "motivators": "High Self-Regard Motivators",
+                            "strengths": "High Self-Regard Strengths",
+                            "weaknesses": "High Self-Regard Weaknesses",
+                            "reaction": "High Self-Regard Reaction Modes",
+                            "communication": "High Self-Regard Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Self-Actualisation",
+                            "score": 115,
+                            "descName": "High Self-Actualisation",
+                            "behaviour": "High Self-Actualisation Behavioural Insights",
+                            "motivators": "High Self-Actualisation Motivators",
+                            "strengths": "High Self-Actualisation Strengths",
+                            "weaknesses": "High Self-Actualisation Weaknesses",
+                            "reaction": "High Self-Actualisation Reaction Modes",
+                            "communication": "High Self-Actualisation Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Emotional Self-Awareness",
+                            "score": 115,
+                            "descName": "High Emotional Self-Awareness",
+                            "behaviour": "High Emotional Self-Awareness Behavioural Insights",
+                            "motivators": "High Emotional Self-Awareness Motivators",
+                            "strengths": "High Emotional Self-Awareness Strengths",
+                            "weaknesses": "High Emotional Self-Awareness Weaknesses",
+                            "reaction": "High Emotional Self-Awareness Reaction Modes",
+                            "communication": "High Emotional Self-Awareness Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Emotional Expression",
+                            "score": 115,
+                            "descName": "High Emotional Expression",
+                            "behaviour": "High Emotional Expression Behavioural Insights",
+                            "motivators": "High Emotional Expression Motivators",
+                            "strengths": "High Emotional Expression Strengths",
+                            "weaknesses": "High Emotional Expression Weaknesses",
+                            "reaction": "High Emotional Expression Reaction Modes",
+                            "communication": "High Emotional Expression Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Asertiveness",
+                            "score": 115,
+                            "descName": "High Asertiveness",
+                            "behaviour": "High Asertiveness Behavioural Insights",
+                            "motivators": "High Asertiveness Motivators",
+                            "strengths": "High Asertiveness Strengths",
+                            "weaknesses": "High Asertiveness Weaknesses",
+                            "reaction": "High Asertiveness Reaction Modes",
+                            "communication": "High Asertiveness Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Independence",
+                            "score": 115,
+                            "descName": "High Independence",
+                            "behaviour": "High Independence Behavioural Insights",
+                            "motivators": "High Independence Motivators",
+                            "strengths": "High Independence Strengths",
+                            "weaknesses": "High Independence Weaknesses",
+                            "reaction": "High Independence Reaction Modes",
+                            "communication": "High Independence Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Interpersonal Relationships",
+                            "score": 115,
+                            "descName": "High Interpersonal Relationships",
+                            "behaviour": "High Interpersonal Relationships Behavioural Insights",
+                            "motivators": "High Interpersonal Relationships Motivators",
+                            "strengths": "High Interpersonal Relationships Strengths",
+                            "weaknesses": "High Interpersonal Relationships Weaknesses",
+                            "reaction": "High Interpersonal Relationships Reaction Modes",
+                            "communication": "High Interpersonal Relationships Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Empathy",
+                            "score": 115,
+                            "descName": "High Empathy",
+                            "behaviour": "High Empathy Behavioural Insights",
+                            "motivators": "High Empathy Motivators",
+                            "strengths": "High Empathy Strengths",
+                            "weaknesses": "High Empathy Weaknesses",
+                            "reaction": "High Empathy Reaction Modes",
+                            "communication": "High Empathy Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Social Responsibility",
+                            "score": 115,
+                            "descName": "High Social Responsibility",
+                            "behaviour": "High Social Responsibility Behavioural Insights",
+                            "motivators": "High Social Responsibility Motivators",
+                            "strengths": "High Social Responsibility Strengths",
+                            "weaknesses": "High Social Responsibility Weaknesses",
+                            "reaction": "High Social Responsibility Reaction Modes",
+                            "communication": "High Social Responsibility Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Problem Solving",
+                            "score": 115,
+                            "descName": "High Problem Solving",
+                            "behaviour": "High Problem Solving Behavioural Insights",
+                            "motivators": "High Problem Solving Motivators",
+                            "strengths": "High Problem Solving Strengths",
+                            "weaknesses": "High Problem Solving Weaknesses",
+                            "reaction": "High Problem Solving Reaction Modes",
+                            "communication": "High Problem Solving Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Reality Testing",
+                            "score": 115,
+                            "descName": "High Reality Testing",
+                            "behaviour": "High Reality Testing Behavioural Insights",
+                            "motivators": "High Reality Testing Motivators",
+                            "strengths": "High Reality Testing Strengths",
+                            "weaknesses": "High Reality Testing Weaknesses",
+                            "reaction": "High Reality Testing Reaction Modes",
+                            "communication": "High Reality Testing Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Impulse Control",
+                            "score": 115,
+                            "descName": "High Impulse Control",
+                            "behaviour": "High Impulse Control Behavioural Insights",
+                            "motivators": "High Impulse Control Motivators",
+                            "strengths": "High Impulse Control Strengths",
+                            "weaknesses": "High Impulse Control Weaknesses",
+                            "reaction": "High Impulse Control Reaction Modes",
+                            "communication": "High Impulse Control Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Flexibility",
+                            "score": 115,
+                            "descName": "High Flexibility",
+                            "behaviour": "High Flexibility Behavioural Insights",
+                            "motivators": "High Flexibility Motivators",
+                            "strengths": "High Flexibility Strengths",
+                            "weaknesses": "High Flexibility Weaknesses",
+                            "reaction": "High Flexibility Reaction Modes",
+                            "communication": "High Flexibility Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Stress Tolerance",
+                            "score": 115,
+                            "descName": "High Stress Tolerance",
+                            "behaviour": "High Stress Tolerance Behavioural Insights",
+                            "motivators": "High Stress Tolerance Motivators",
+                            "strengths": "High Stress Tolerance Strengths",
+                            "weaknesses": "High Stress Tolerance Weaknesses",
+                            "reaction": "High Stress Tolerance Reaction Modes",
+                            "communication": "High Stress Tolerance Communication"
+                          },
+                          {
+                            "userID": 1,
+                            "categoryName": "Optimism",
+                            "score": 115,
+                            "descName": "High Optimism",
+                            "behaviour": "High Optimism Behavioural Insights",
+                            "motivators": "High Optimism Motivators",
+                            "strengths": "High Optimism Strengths",
+                            "weaknesses": "High Optimism Weaknesses",
+                            "reaction": "High Optimism Reaction Modes",
+                            "communication": "High Optimism Communication"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "messege": {
+                        "type": "string",
+                        "example": "User results not found"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+}
