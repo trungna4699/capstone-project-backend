@@ -1,6 +1,7 @@
 ![Speckio](https://i1.wp.com/speckio-teams.com/wp-content/uploads/2020/09/cropped-speckio_logo_full_text_only.png?fit=1700%2C424 "Speckio")
 
 # Speckio API
+This project is also contributed by Matthew Mulheran and Jason Hummrich
 
 ## Description
 The Speckio API is organized around REST, built for [Speckio Teams](http://speckio-teams.com) using [nodejs](https://nodejs.org/en/). Our API has predictable resource-oriented URLs, accepts queries and form-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes and authentication.
